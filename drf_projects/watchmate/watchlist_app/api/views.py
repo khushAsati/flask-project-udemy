@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework import status
 #from rest_framework.decorators import api_view
 from watchlist_app.models import Watchlist,StreamPlatform
-from watchlist_app.api.serializers import WatchlistSerializer
+from watchlist_app.api.serializers import WatchlistSerializer,StreamPlatformSerializer
 from rest_framework.views import APIView
 
 
@@ -16,7 +16,7 @@ class StreamPlatformAV(APIView):
         return Response(serializer.data)
 
     def post(self,request):
-        serializer = StreamPlatformSeroializer(data= request.data)# accessing data through request 
+        serializer = StreamPlatformSerializer(data= request.data)# accessing data through request 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
