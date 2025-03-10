@@ -1,38 +1,44 @@
 from rest_framework import serializers
 
-from watchlist_app.models import Movie
+from watchlist_app.models import Watchlist,StreamPlatform
+
+
+class StreamPlatformSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StreamPlatform
+        fields = "__all__"
 
 # 2) Modelserializer
-class MovieSerializer(serializers.ModelSerializer):
+class WatchlistSerializer(serializers.ModelSerializer):
     
     #custom serializerfield(calculating some python3 managcustom field)
     # create specific method
-    len_name = serializers.SerializerMethodField()#field 
-     #len_name(variable_name)
+   # len_name = serializers.SerializerMethodField()#field 
+     #len_name(variable_name)s
     class Meta:
-        model = Movie
+        model = Watchlist
         fields = "__all__"
         #exclude = ['name'] # if we dont want to include one field we can exclude that
         
-    def get_len_name(self,object):#object has access to id,name ,desc
-        length = len(object.name)
-        return length
+    # def get_len_name(self,object):#object has access to id,name ,desc
+    #     length = len(object.name)
+    #     return length
         
           
         
         
-        # if you need to define validation
-    def validate_name(self,value):# value of the   name 
-        if len(value) < 2:
-            print("jhkjhu")
-            raise serializers.ValidationError("name is too short")
-        else:
-            return value 
-    def validate(self,data):
-        if data['name'] == data['description']:
-            raise serializers.ValidationError("title ana des. shpuld not same")
-        else:
-            return data    
+    #     # if you need to define validation
+    # def validate_name(self,value):# value of the   name 
+    #     if len(value) < 2:
+    #         print("jhkjhu")
+    #         raise serializers.ValidationError("name is too short")
+    #     else:
+    #         return value 
+    # def validate(self,data):
+    #     if data['name'] == data['description']:
+    #         raise serializers.ValidationError("title ana des. shpuld not same")
+    #     else:
+    #         return data    
 
 # validations works when we called the method (serializer.is_valid())
 
