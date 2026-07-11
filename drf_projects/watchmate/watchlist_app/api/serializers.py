@@ -1,32 +1,62 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
-from watchlist_app.models import Watchlist,StreamPlatform
+from watchlist_app.models import WatchList,StreamPlatform,Review
+
+# 2) Modelserializer
+class ReviewSerializer(serializers.ModelSerializer):
+    userreview = serializers.StringRelatedField(read_only=True)
+    class Meta:
+        model= Review
+        exclude = ('watchlist',)
 
 
-class StreamPlatformSerializer(serializers.ModelSerializer):
+class WatchListSerializer(serializers.HyperlinkedModelSerializer):
+    reviews = ReviewSerializer(many= True,read_only= True)
+    class Meta:
+
+        model = WatchList
+        fields = ["url","title","storyline","platform","active","created","reviews","avg_rating","avg_number",]
+    #     #exclude = ['name'] # if we dont want to include one field we can exclude that
+    
+    
+
+class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
+    # we are going to add new field here for showing multiple watchlist(movies) on one streamingplatform
+    watchlist = WatchListSerializer(many=True,read_only=True) # watchlist from related_name = "watchist"
+    #nested relationship
+    
     class Meta:
         model = StreamPlatform
         fields = "__all__"
+              
 
-# 2) Modelserializer
-class WatchlistSerializer(serializers.ModelSerializer):
+#when we create new streaming platform we will not pass watchlist bcz it is (read_only)field
+
+
+    
+
+    
+    
+    
+    
+    
+    
     
     #custom serializerfield(calculating some python3 managcustom field)
     # create specific method
-   # len_name = serializers.SerializerMethodField()#field 
-     #len_name(variable_name)s
-    class Meta:
-        model = Watchlist
-        fields = "__all__"
-        #exclude = ['name'] # if we dont want to include one field we can exclude that
+    # len_name = serializers.SerializerMethodField()#field 
+    #  #len_name(variable_name)
+    # class Meta:
+    #     model = WatchList
+    #     fields = "__all__"
+    #     #exclude = ['name'] # if we dont want to include one field we can exclude that
         
     # def get_len_name(self,object):#object has access to id,name ,desc
     #     length = len(object.name)
     #     return length
         
           
-        
-        
     #     # if you need to define validation
     # def validate_name(self,value):# value of the   name 
     #     if len(value) < 2:
@@ -39,6 +69,13 @@ class WatchlistSerializer(serializers.ModelSerializer):
     #         raise serializers.ValidationError("title ana des. shpuld not same")
     #     else:
     #         return data    
+        
+
+        
+        
+        
+        
+        
 
 # validations works when we called the method (serializer.is_valid())
 
