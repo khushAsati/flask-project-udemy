@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from rest_framework.authtoken import views
+from watchlist_app.api.views import CustomLoginView, CustomRegisterView
+
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('movie/',include('watchlist_app.api.urls')),
+    path('watch/',include('watchlist_app.api.urls')),
+    path('api-token-auth/', views.obtain_auth_token),
+    path('account/login/', CustomLoginView.as_view()),
+    path('account/register/', CustomRegisterView.as_view()),
+    path('account/', include('user_app.api.urls')),
 ]
